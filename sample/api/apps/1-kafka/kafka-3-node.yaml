@@ -1,0 +1,62 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: assetmark-kafka-cluster
+spec:
+  kafka:
+    version: 3.1.0
+    replicas: 3
+    logging:
+      type: inline
+      loggers:
+        kafka.root.logger.level: "INFO"
+    resources:
+      requests:
+        memory: 64Gi
+        cpu: "8"
+      limits:
+        memory: 64Gi
+        cpu: "12"
+    jvmOptions:
+      -Xms: 8192m
+      -Xmx: 8192m
+    listeners:
+      - name: external
+        port: 9094
+        type: loadbalancer
+        tls: false
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      #- name: tls
+      #  port: 9093
+      #  type: internal
+      #  tls: true
+    config:
+      auto.create.topics.enable: "true"
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      default.replication.factor: 3
+      # When a producer sets acks to "all" (or "-1"), min.insync.replicas specifies the minimum number of replicas that
+      #  must acknowledge a write for the write to be considered successful.
+      min.insync.replicas: 2
+      inter.broker.protocol.version: "3.1"
+
+    storage:
+      type: jbod
+      volumes:
+      - id: 0
+        type: persistent-claim
+        size: 5Gi
+        deleteClaim: false
+  zookeeper:
+    replicas: 3
+    storage:
+      type: persistent-claim
+      size: 5Gi
+      deleteClaim: false
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
