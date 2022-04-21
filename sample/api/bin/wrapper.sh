@@ -65,6 +65,28 @@ input="/tmp/$dte-error.txt"
  done < $input
  echo error/warnings:$result
 }
+mongodb_parse () {
+cd /opt/api/apps/7-mongodb
+./bootstrap.sh dev nginx-test >/tmp/$dte-temp.txt 2>/tmp/$dte-error.txt
+input="/tmp/$dte-temp.txt"
+ while read -r line
+ do
+ 	echo $line |grep -m1 -w -i "^NAME:"
+ 	echo $line |grep -m1 -w -i "LAST DEPLOYED:"
+ 	echo $line |grep -m1 -w -i "NAMESPACE:"
+ 	echo $line |grep -m1 -w -i "STATUS:"
+ 	echo $line |grep -m1 -w -i "CHART NAME:"
+ 	echo $line |grep -m1 -w -i "CHART VERSION:"
+ 	echo $line |grep -m1 -w -i "APP VERSION:"
+ done < $input
+input="/tmp/$dte-error.txt"
+ while read -r line
+ do
+    result=`echo $line |grep -i error`
+    echo error/warnings:$result
+ done < $input
+}
+
 cleanup () {
   rm /tmp/$dte-temp.txt
   rm /tmp/$dte-error.txt
@@ -74,16 +96,20 @@ varx=$1
 case $varx in
   nginx|-n)
     nginx_parse |jc --kv -p 
-    cleanup
+    #cleanup
     ;;
   kafka|-k)
     kafka_parse |jc --kv -p
-    cleanup
+    #cleanup
     ;;
   postgres|-n)
     postgres_parse |jc --kv -p
-    cleanup
-    ;;  
+    #cleanup
+    ;; 
+  mongodb|-n)
+    mongodb_parse |jc --kv -p
+    #cleanup
+    ;;	
   list|-l)
     helm list -o json --all-namespaces 
     ;;
@@ -91,7 +117,9 @@ case $varx in
     echo "available commands :" 
     echo "  list : list of installed apps" 
     echo "  nginx : to install nginx" 
-    echo "  kakfa : to install kafka" 
+    echo "  kakfa : to install kafka"
+    echo "  kakfa : to install postgres"
+    echo "  kakfa : to install mongodb" 
     ;;
   *)
     echo "error:no parameter given to wrapper parser use -h for help" |jc --kv -p

@@ -51,5 +51,14 @@ class SchemaRegistryService(Resource):
         jsonS = jsonify(data)
         return (jsonS)
 
+@api.route('/services/mongodb')
+class SchemaRegistryService(Resource):
+    def get(self):
+        my_command = 'sudo bash /opt/api/bin/wrapper.sh mongodb'
+        cmd_output = subprocess.check_output(my_command, shell=True, text=True)
+        data = json.loads(cmd_output)
+        jsonS = jsonify(data)
+        return (jsonS)
+
 if __name__ == '__main__':
     app.run(debug=True)
