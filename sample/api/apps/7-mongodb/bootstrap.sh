@@ -12,6 +12,8 @@ ns=$2
 kubectl create namespace $ns
 kubectl config set-context $(kubectl config current-context) --namespace=$ns
 
+kubectl apply -f deploy/crd.yaml
+
 kubectl apply -f deploy/rbac.yaml
 
 kubectl apply -f deploy/operator.yaml
@@ -33,6 +35,6 @@ exit $ret_code
 fi
 
 
-kubectl get all
+#kubectl get all
 
 

@@ -43,7 +43,7 @@ class SchemaRegistryService(Resource):
         return (jsonS)
 
 @api.route('/services/postgres')
-class SchemaRegistryService(Resource):
+class PostgresService(Resource):
     def get(self):
         my_command = 'sudo bash /opt/api/bin/wrapper.sh postgres'
         cmd_output = subprocess.check_output(my_command, shell=True, text=True)
@@ -52,7 +52,7 @@ class SchemaRegistryService(Resource):
         return (jsonS)
 
 @api.route('/services/mongodb')
-class SchemaRegistryService(Resource):
+class MongodbService(Resource):
     def get(self):
         my_command = 'sudo bash /opt/api/bin/wrapper.sh mongodb'
         cmd_output = subprocess.check_output(my_command, shell=True, text=True)
