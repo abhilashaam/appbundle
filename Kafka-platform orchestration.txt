@@ -1,0 +1,4 @@
+https://hevodata.com/learn/kafka-python/
+https://docs.confluent.io/clients-confluent-kafka-python/current/overview.html
+https://betterprogramming.pub/test-your-kafka-cluster-with-python-5acaff78f5b3
+https://www.google.com/search?q=python+kubernetes+client+crd&rlz=1C1GCEU_enIN993IN993&oq=python+kubernetes+client+crds&aqs=chrome.1.69i57j0i22i30l2j0i390.24180j0j15&sourceid=chrome&ie=UTF-8
